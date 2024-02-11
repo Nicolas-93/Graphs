@@ -2,6 +2,9 @@ from undirected_graph import UndirectedGraph
 from manim import *
 from graph_utils import invert_dict, is_bipartite
 from collections import deque, defaultdict
+from itertools import chain
+from typing import Optional, Tuple
+from graph import Vertex
 
 class LabeledModifiedGraph(Scene):
     def construct(self):
@@ -19,40 +22,45 @@ class LabeledModifiedGraph(Scene):
         ug = UndirectedGraph(edges=edges)
 
         # Create base graph
-        self.manim_graph = Graph(
-            vertices, edges,
-            layout="spring",
-            partitions=None,
-            layout_scale=3,
-            labels=True,
-            vertex_config={
-                0: {"fill_color": RED_C}
-            },
-            edge_config={}
-        )
+        self.manim_graph = self._graph_to_manim(ug)
         self.play(Create(self.manim_graph))
         
         # Check if the graph is bipartite
         self._is_bipartite(ug)
-        self.add(self.manim_graph)
 
         partitions = is_bipartite(ug)
         
         if partitions:
-            vertex_config = {v: {"fill_color": RED_C} for v in partitions[0]}
-            vertex_config.update({v: {"fill_color": GREEN_C} for v in partitions[1]})
-            partitioned = Graph(
-                vertices, edges,
-                layout="partite",
-                partitions=partitions,
-                layout_scale=3,
-                labels=True,
-                vertex_config=vertex_config,
-                edge_config={}
-            )
-            self.play(Transform(self.manim_graph, partitioned))
+            self.clear()
+            partitioned = self._graph_to_manim(ug, partitions, completed_partitions=True)
+            self.play(ReplacementTransform(self.manim_graph, partitioned))
 
         self.wait(5)
+
+    def _graph_to_manim(
+            self,
+            graph: UndirectedGraph,
+            partitions: Optional[Tuple[Tuple[Vertex], Tuple[Vertex]]] = None,
+            completed_partitions=False
+        ):
+        """
+        Convert a graph to a manim graph
+        """
+        vertex_config = {}
+        edge_config = {}
+        if partitions:
+            vertex_config = {v: {"fill_color": RED_C} for v in partitions[0]}
+            vertex_config.update({v: {"fill_color": GREEN_C} for v in partitions[1]})
+
+        return Graph(
+            graph.get_vertices(), graph.get_edges(),
+            layout='partite' if partitions and completed_partitions else 'circular',
+            partitions=partitions,
+            layout_scale=3,
+            labels=True,
+            vertex_config=vertex_config,
+            edge_config=edge_config
+        )
 
     def _is_bipartite(self, graph: Graph):
         """Check if a graph is bipartite and return the two partitions if it is
@@ -65,6 +73,10 @@ class LabeledModifiedGraph(Scene):
                 - If the graph is bipartite, the two partitions
                 - If the graph is not bipartite, False
         """
+
+        def _get_bipartition_as_list(bipartition: dict):
+            d = invert_dict(bipartition)
+            return tuple(d[False]), tuple(d[True])
 
         queue = deque()
         bipartition = defaultdict(lambda : -1)
@@ -92,11 +104,10 @@ class LabeledModifiedGraph(Scene):
                 if not_visited(v):
                     queue.append(v)
                     bipartition[v] = not bipartition[u]
-                    self.play(
-                        self.manim_graph[v].animate.set_color(
-                            GREEN_C if bipartition[v] else RED_C
-                        )
-                    )
+
+                    new_graph = self._graph_to_manim(graph, _get_bipartition_as_list(bipartition))
+                    self.play(ReplacementTransform(self.manim_graph, new_graph))
+                    self.manim_graph = new_graph
                     self.wait()
 
                 elif bipartition[v] == bipartition[u]:
@@ -112,6 +123,4 @@ class LabeledModifiedGraph(Scene):
                 
                 self.remove(line)
 
-        d = invert_dict(bipartition)
-
-        return tuple(d[False]), tuple(d[True])
+        return _get_bipartition_as_list(bipartition)
