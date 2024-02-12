@@ -121,7 +121,7 @@ class Graph(ABC):
         Returns:
             int: Number of vertices
         """
-        return len(self.get_vertices())
+        return len(tuple(self.get_vertices()))
 
     def get_nb_loops(self) -> int:
         """Get the number of loops in the graph
