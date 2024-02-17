@@ -1,10 +1,40 @@
 from typing import Hashable, Iterable, Tuple, Sequence
+from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 from collections import deque, namedtuple
 import graphviz as gv
 
 Vertex = Hashable
-Edge = namedtuple('Edge', ('v1, v2'))
+
+@dataclass(frozen=True, eq=True)
+class Edge:
+    v1: Vertex = field(hash=True, compare=True)
+    v2: Vertex = field(hash=True, compare=True)
+
+    def opposite(self) -> 'Edge':
+        return Edge(self.v2, self.v1)
+    
+    def get_vertices(self) -> Tuple[Vertex, Vertex]:
+        return (self.v1, self.v2)
+
+    def __iter__(self):
+        return iter((self.v1, self.v2))
+    
+    def __getitem__(self, index: int):
+        return (self.v1, self.v2)[index]
+    
+    def stringify(self) -> str:
+        return (str(self.v1), str(self.v2))
+
+@dataclass(frozen=True, eq=True)
+class WeightedEdge(Edge):
+    weight: float = field(hash=None, compare=False)
+
+    def get_weight(self) -> float:
+        return self.weight
+
+    def opposite(self) -> 'WeightedEdge':
+        return WeightedEdge(self.v2, self.v1, self.weight)
 
 class Graph(ABC):
     @abstractmethod
@@ -16,6 +46,20 @@ class Graph(ABC):
             if one those vertices doesn't exists, they will be created
         """
         pass
+    
+    def _add_vertex_if_inexistant(self, edge: Edge):
+        """Add vertices from edge if they are not already
+        in the graph.
+
+        Args:
+            edge (Edge): Edge
+        """
+
+        if not self.has_vertex(edge.v1):
+            self.add_vertex(edge.v1)
+
+        if not self.has_vertex(edge.v2):
+            self.add_vertex(edge.v2)
 
     def add_edges(self, edges: Iterable[Edge]):
         """Add multiple edges to the graph
@@ -138,6 +182,7 @@ class Graph(ABC):
     @abstractmethod
     def remove_vertex(self, v: Vertex):
         """Remove a vertex from the graph
+        and all edges linked to it
 
         Args:
             v (Vertex): Vertex to remove
@@ -182,21 +227,7 @@ class Graph(ABC):
             raise ValueError(f"Edge {edge} doesn't exists")
 
     def as_dot(self) -> gv.Graph:
-        """Get a graphviz representation of the graph
-
-        Returns:
-            gv.Graph: Graphviz object
-        """
-        dot = gv.Graph()
-
-        def _stringify(edges: Edge) -> Iterable[Tuple[str, str]]:
-            return (
-                (str(v1), str(v2))
-                for v1, v2 in edges
-            )
-
-        dot.edges(_stringify(self.get_edges()))
-        return dot
+        pass
 
     def breadth_first_search(self, start: Vertex) -> Iterable[Vertex]:
         """Breadth first search of the graph
