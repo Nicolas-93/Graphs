@@ -26,6 +26,10 @@ class Edge:
     def stringify(self) -> str:
         return (str(self.v1), str(self.v2))
 
+    def ordered(self) -> 'Edge':
+        return Edge(*sorted(self.get_vertices()))
+
+
 @dataclass(frozen=True, eq=True)
 class WeightedEdge(Edge):
     weight: float = field(hash=None, compare=False)
@@ -38,6 +42,9 @@ class WeightedEdge(Edge):
 
     def opposite(self) -> 'WeightedEdge':
         return WeightedEdge(self.v2, self.v1, self.weight)
+
+    def ordered(self) -> 'WeightedEdge':
+        return WeightedEdge(*sorted(self.get_vertices()), self.weight)
 
 class Graph(ABC):
     @abstractmethod
@@ -228,6 +235,10 @@ class Graph(ABC):
         """
         if not self.has_edge(edge):
             raise ValueError(f"Edge {edge} doesn't exists")
+
+    def _require_inexistant_edge(self, edge: Edge):
+        if self.has_edge(edge):
+            raise ValueError(f"Edge {edge} already exists")
 
     def as_dot(self) -> gv.Graph:
         pass

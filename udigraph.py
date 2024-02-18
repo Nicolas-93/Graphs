@@ -4,6 +4,7 @@ from itertools import product, chain
 from graph import Graph, Vertex, Edge
 from adjacent_graph import AdjGraph
 import graphviz as gv
+import inspect
 
 class UndirectedGraph(AdjGraph):
 
@@ -15,27 +16,22 @@ class UndirectedGraph(AdjGraph):
         super().__init__(edges=edges)
 
     def add_edge(self, edge: Edge):
+        self._require_inexistant_edge(edge)
+        self._require_inexistant_edge(edge.opposite())
+
         super().add_edge(edge)
         super().add_edge(edge.opposite())
 
     def get_edges(self) -> Iterable[Edge]:
-
         return filter(
             lambda edge : edge.v1 <= edge.v2,
             super().get_edges()
         )
 
-        # return sorted(
-        #     chain.from_iterable(
-        #         list(product((v1,), filter(lambda x : x <= v1, vn)))
-        #         for v1, vn in self.edges.items()
-        #     )
-        # )
-
     def has_edge(self, edge: Edge) -> bool:
         return (
             super().has_edge(edge)
-            and
+            or
             super().has_edge(edge.opposite())
         )
 

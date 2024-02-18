@@ -8,6 +8,7 @@ class AdjGraph(Graph):
     edges : defaultdict[Vertex, Set[Vertex]]
 
     def __init__(self, edges: Optional[Iterable[Edge]] = None):
+        super().__init__()
         self.vertices = set()
         self.edges = defaultdict(set)
 

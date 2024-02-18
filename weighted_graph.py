@@ -4,16 +4,17 @@ from typing import Dict, Iterable
 class WeightedGraph(Graph):
     weights: Dict[Edge, float]
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         super().__init__()
         self.weights = dict()
 
     def add_edge(self, edge: WeightedEdge):
-        super().add_edge(edge)
+        #print(edge)
+        import inspect
+        print(inspect.stack()[1])
         self.weights[edge.as_edge()] = edge.get_weight()
 
     def remove_edge(self, edge: Edge):
-        super().remove_edge(edge)
         del self.weights[edge]
 
     def get_weight(self, edge: Edge) -> float:
