@@ -30,6 +30,9 @@ class Edge:
 class WeightedEdge(Edge):
     weight: float = field(hash=None, compare=False)
 
+    def as_edge(self) -> Edge:
+        return Edge(*self)
+
     def get_weight(self) -> float:
         return self.weight
 

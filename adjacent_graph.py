@@ -15,12 +15,14 @@ class AdjGraph(Graph):
             self.add_edges(edges)
 
     def add_edge(self, edge: Edge):
+        super().add_edge(edge)
         self._add_vertex_if_inexistant(edge)
     
         left, right = edge.get_vertices()
         self.edges[left].add(right)
     
     def add_vertex(self, v: Vertex):
+        super().add_vertex(v)
         self.vertices.add(v)
         self.edges[v]
 
@@ -43,8 +45,8 @@ class AdjGraph(Graph):
     def has_edge(self, edge: Edge) -> bool:
         left, right = edge.get_vertices()
         return (
-            self.left  in self.edges and
-            self.right in self.edges[left]
+            left  in self.edges and
+            right in self.edges[left]
         )
 
     def has_vertex(self, v: Vertex) -> bool:
@@ -57,12 +59,14 @@ class AdjGraph(Graph):
         return len(self.vertices)
 
     def remove_edge(self, edge: Edge):
+        super().remove_edge(edge)
         self._require_edge(edge)
         left, right = edge.get_vertices()
 
         self.edges[left].remove(right)
 
     def remove_vertex(self, v: Vertex):
+        super().remove_vertex(v)
         self._require_vertex(v)
 
         for neigbours in self.edges.values():
