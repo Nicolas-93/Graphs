@@ -1,0 +1,3 @@
+- WeightedUndirectedGraph: redundant store of weights
+- Doctests
+- Package

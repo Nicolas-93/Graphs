@@ -1,4 +1,5 @@
-from graph import Graph, Vertex, Edge
+from graphs import Vertex, Edge, Graph
+
 from collections import defaultdict
 from typing import Set, Optional, Iterable
 from itertools import product, chain
@@ -19,7 +20,7 @@ class AdjGraph(Graph):
         super().add_edge(edge)
         self._add_vertex_if_inexistant(edge)
     
-        left, right = edge.get_vertices()
+        left, right = edge.vertices()
         self.edges[left].add(right)
     
     def add_vertex(self, v: Vertex):
@@ -44,7 +45,7 @@ class AdjGraph(Graph):
         return filter(lambda v : self.has_edge((v, v)), self.vertices)
 
     def has_edge(self, edge: Edge) -> bool:
-        left, right = edge.get_vertices()
+        left, right = edge.vertices()
         return (
             left  in self.edges and
             right in self.edges[left]
@@ -62,7 +63,7 @@ class AdjGraph(Graph):
     def remove_edge(self, edge: Edge):
         super().remove_edge(edge)
         self._require_edge(edge)
-        left, right = edge.get_vertices()
+        left, right = edge.vertices()
 
         self.edges[left].remove(right)
 

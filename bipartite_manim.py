@@ -1,23 +1,24 @@
-from undirected_graph import UndirectedGraph
+from graphs import Vertex, Edge
+from graphs.basic import UndirectedGraph
+from graphs.algorithms import is_bipartite
+from graphs.algorithms import invert_dict
 from manim import *
-from graph_utils import invert_dict, is_bipartite
 from collections import deque, defaultdict
 from itertools import chain
 from typing import Optional, Tuple
-from graph import Vertex
 
 class LabeledModifiedGraph(Scene):
     def construct(self):
         vertices = [0, 1, 2, 3, 4, 5, 6]
         edges = (
-            (0, 1),
-            (0, 2),
-            (0, 3),
-            (1, 4),
-            (2, 5),
-            (3, 5),
-            (5, 6),
-            (6, 4),
+            Edge(0, 1),
+            Edge(0, 2),
+            Edge(0, 3),
+            Edge(1, 4),
+            Edge(2, 5),
+            Edge(3, 5),
+            Edge(5, 6),
+            Edge(6, 4),
         )
         ug = UndirectedGraph(edges=edges)
 
@@ -53,7 +54,8 @@ class LabeledModifiedGraph(Scene):
             vertex_config.update({v: {"fill_color": GREEN_C} for v in partitions[1]})
 
         return Graph(
-            graph.get_vertices(), graph.get_edges(),
+            list(graph.get_vertices()),
+            list(graph.get_edges_as_tuples()),
             layout='partite' if partitions and completed_partitions else 'circular',
             partitions=partitions,
             layout_scale=3,

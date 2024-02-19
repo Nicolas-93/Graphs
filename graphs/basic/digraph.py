@@ -1,6 +1,7 @@
-from adjacent_graph import AdjGraph
+from graphs import Edge
+from graphs.impl.adjacent_graph import AdjGraph
+
 from typing import Optional, Iterable
-from graph import Edge
 import graphviz as gv
 
 class DirectedGraph(AdjGraph):

@@ -1,16 +1,20 @@
-from digraph import DirectedGraph
+from graphs import Edge, WeightedEdge, Vertex
+from graphs.basic.digraph import DirectedGraph
+from graphs.weighted.wgraph import WeightedGraph
+
 from typing import Optional, Iterable
-from graph import Edge, WeightedEdge, Vertex
-from weighted_graph import WeightedGraph
 import graphviz as gv
 
 class WeightedDirectedGraph(WeightedGraph, DirectedGraph):
     def __init__(self, edges: Optional[Iterable[WeightedEdge]] = None):
-        super().__init__(self)
+        WeightedGraph.__init__(self)
+        DirectedGraph.__init__(self, edges=edges)
+        # super().__init__(edges=edges)
 
     def add_edge(self, edge: WeightedEdge):
         # Redefined for typing
-        super().add_edge(self, edge)
+        DirectedGraph.add_edge(self, edge)
+        WeightedGraph.add_edge(self, edge)
 
     def get_edges(self) -> Iterable[WeightedEdge]:
         # Redefined for typing

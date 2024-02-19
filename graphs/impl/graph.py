@@ -14,20 +14,25 @@ class Edge:
     def opposite(self) -> 'Edge':
         return Edge(self.v2, self.v1)
     
-    def get_vertices(self) -> Tuple[Vertex, Vertex]:
+    def vertices(self) -> Tuple[Vertex, Vertex]:
         return (self.v1, self.v2)
+    
+    as_tuple = vertices
 
     def __iter__(self):
-        return iter((self.v1, self.v2))
-    
+        return iter(self.as_tuple())
+
     def __getitem__(self, index: int):
-        return (self.v1, self.v2)[index]
+        return self.as_tuple()[index]
+    
+    def __len__(self):
+        return 2
     
     def stringify(self) -> str:
         return (str(self.v1), str(self.v2))
 
     def ordered(self) -> 'Edge':
-        return Edge(*sorted(self.get_vertices()))
+        return Edge(*sorted(self.vertices()))
 
 
 @dataclass(frozen=True, eq=True)
@@ -35,7 +40,13 @@ class WeightedEdge(Edge):
     weight: float = field(hash=None, compare=False)
 
     def as_edge(self) -> Edge:
-        return Edge(*self)
+        return Edge(self.v1, self.v2)
+
+    def as_tuple(self) -> Tuple[Vertex, Vertex]:
+        return (self.v1, self.v2, self.weight)
+
+    def __len__(self):
+        return 3
 
     def get_weight(self) -> float:
         return self.weight
@@ -44,7 +55,7 @@ class WeightedEdge(Edge):
         return WeightedEdge(self.v2, self.v1, self.weight)
 
     def ordered(self) -> 'WeightedEdge':
-        return WeightedEdge(*sorted(self.get_vertices()), self.weight)
+        return WeightedEdge(*sorted(self.vertices()), self.weight)
 
 class Graph(ABC):
     @abstractmethod
@@ -103,9 +114,17 @@ class Graph(ABC):
         """Get all edges of the graph
 
         Returns:
-            Iterable[Edge]: Edges of the graph, as tuples of vertices
+            Iterable[Edge]: Edges of the graph
         """
         pass
+
+    def get_edges_as_tuples(self) -> Iterable[tuple[Vertex, Vertex]]:
+        """Get all graph's edges as tuples
+
+        Returns:
+            Iterable[tuple[Vertex, Vertex]]: Edges of the graph, as tuples of vertice
+        """
+        return (edge.vertices() for edge in self.get_edges())
 
     @abstractmethod
     def get_vertices(self) -> Iterable[Vertex]:

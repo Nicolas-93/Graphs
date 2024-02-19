@@ -1,8 +1,9 @@
+from graphs import Vertex, Edge
+from graphs.impl.adjacent_graph import AdjGraph
+
 from typing import Hashable, Sequence, Iterable, Tuple, Optional
 from collections import defaultdict
 from itertools import product, chain
-from graph import Graph, Vertex, Edge
-from adjacent_graph import AdjGraph
 import graphviz as gv
 import inspect
 

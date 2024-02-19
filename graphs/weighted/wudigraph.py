@@ -1,7 +1,8 @@
-from udigraph import UndirectedGraph
+from graphs.basic.udigraph import UndirectedGraph
+from graphs import Edge, WeightedEdge, Vertex
+from graphs.weighted.wgraph import WeightedGraph
+
 from typing import Optional, Iterable
-from graph import Edge, WeightedEdge, Vertex
-from weighted_graph import WeightedGraph
 import graphviz as gv
 
 class WeightedUndirectedGraph(UndirectedGraph, WeightedGraph):

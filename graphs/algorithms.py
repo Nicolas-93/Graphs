@@ -1,5 +1,5 @@
+from graphs import Vertex, Graph
 from typing import Union, Tuple
-from graph import Graph, Vertex
 from collections import deque, defaultdict
 
 def invert_dict(dico: dict) -> dict:
