@@ -2,6 +2,7 @@ from typing import Hashable, Iterable, Tuple, Sequence
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 from collections import deque, namedtuple
+from functools import total_ordering
 import graphviz as gv
 
 Vertex = Hashable
@@ -34,7 +35,7 @@ class Edge:
     def ordered(self) -> 'Edge':
         return Edge(*sorted(self.vertices()))
 
-
+@total_ordering
 @dataclass(frozen=True, eq=True)
 class WeightedEdge(Edge):
     weight: float = field(hash=None, compare=False)
@@ -56,6 +57,9 @@ class WeightedEdge(Edge):
 
     def ordered(self) -> 'WeightedEdge':
         return WeightedEdge(*sorted(self.vertices()), self.weight)
+    
+    def __lt__(self, other):
+        self.weight < other.weight
 
 class Graph(ABC):
     @abstractmethod
@@ -229,6 +233,17 @@ class Graph(ABC):
             Iterable[Vertex]: Neighbours of the vertex
         """
         pass
+
+    def get_neigbours_edges(self, v: Vertex) -> Iterable[Edge]:
+        """Get neighbours edges of a vertex
+
+        Args:
+            v (Vertex): Vertex to get the neighbours from
+
+        Returns:
+            Iterable[Edge]: Vertex's neighbours edges
+        """
+        return (Edge(v, neighbour) for neighbour in self.get_neigbours(v))
 
     def _require_vertex(self, v: Vertex):
         """Check if a vertex exists in the graph
