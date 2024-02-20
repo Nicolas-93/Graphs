@@ -1,7 +1,7 @@
 from graphs import Vertex, Edge
 from graphs.basic import UndirectedGraph
 from graphs.algorithms import is_bipartite
-from graphs.algorithms import invert_dict
+from graphs.utils import invert_dict
 from manim import *
 from collections import deque, defaultdict
 from itertools import chain

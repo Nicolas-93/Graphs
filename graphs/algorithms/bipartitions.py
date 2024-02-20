@@ -1,14 +1,7 @@
 from graphs import Vertex, Graph
 from typing import Union, Tuple
 from collections import deque, defaultdict
-
-def invert_dict(dico: dict) -> dict:
-    res = defaultdict(list)
-    
-    for k, v in dico.items():
-        res[v].append(k)
-    
-    return dict(res)
+from graphs.utils import invert_dict
 
 def is_bipartite(graph: Graph) -> Union[Tuple[Tuple[Vertex], Tuple[Vertex]], bool]:
     """Check if a graph is bipartite and return the two partitions if it is
