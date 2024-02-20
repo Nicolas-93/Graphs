@@ -1,15 +1,15 @@
+from collections import deque, defaultdict
+from typing import Optional, Tuple
+
+from manim import *
+
 from graphs import Vertex, Edge
 from graphs.basic import UndirectedGraph
 from graphs.algorithms import is_bipartite
 from graphs.utils import invert_dict
-from manim import *
-from collections import deque, defaultdict
-from itertools import chain
-from typing import Optional, Tuple
 
 class LabeledModifiedGraph(Scene):
     def construct(self):
-        vertices = [0, 1, 2, 3, 4, 5, 6]
         edges = (
             Edge(0, 1),
             Edge(0, 2),
@@ -25,12 +25,12 @@ class LabeledModifiedGraph(Scene):
         # Create base graph
         self.manim_graph = self._graph_to_manim(ug)
         self.play(Create(self.manim_graph))
-        
+
         # Check if the graph is bipartite
         self._is_bipartite(ug)
 
         partitions = is_bipartite(ug)
-        
+
         if partitions:
             self.clear()
             partitioned = self._graph_to_manim(ug, partitions, completed_partitions=True)
@@ -83,11 +83,12 @@ class LabeledModifiedGraph(Scene):
         queue = deque()
         bipartition = defaultdict(lambda : -1)
         start = graph.get_vertices()[0]
-        
+
         queue.append(start)
         bipartition[start] = False
 
-        not_visited = lambda v: bipartition[v] == -1
+        def not_visited(v: Vertex):
+            return bipartition[v] == -1
 
         while queue:
             u = queue.popleft()
@@ -122,7 +123,7 @@ class LabeledModifiedGraph(Scene):
                     )
                     self.play(Create(line))
                     return False
-                
+
                 self.remove(line)
 
         return _get_bipartition_as_list(bipartition)
