@@ -24,7 +24,7 @@ def is_bipartite(graph: Graph) -> Union[Tuple[Tuple[Vertex], Tuple[Vertex]], boo
 
     while queue:
         u = queue.popleft()
-        for v in graph.get_neigbours(u):
+        for v in graph.get_neighbours(u):
             if bipartition[v] == -1: # If not visited
                 queue.append(v)
                 bipartition[v] = not bipartition[u]

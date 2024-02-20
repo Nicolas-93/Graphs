@@ -223,7 +223,7 @@ class Graph(ABC):
         pass
 
     @abstractmethod
-    def get_neigbours(self, v: Vertex) -> Iterable[Vertex]:
+    def get_neighbours(self, v: Vertex) -> Iterable[Vertex]:
         """Get the neighbours of a vertex
 
         Args:
@@ -234,7 +234,7 @@ class Graph(ABC):
         """
         pass
 
-    def get_neigbours_edges(self, v: Vertex) -> Iterable[Edge]:
+    def get_neighbours_edges(self, v: Vertex) -> Iterable[Edge]:
         """Get neighbours edges of a vertex
 
         Args:
@@ -243,7 +243,7 @@ class Graph(ABC):
         Returns:
             Iterable[Edge]: Vertex's neighbours edges
         """
-        return (Edge(v, neighbour) for neighbour in self.get_neigbours(v))
+        return (Edge(v, neighbour) for neighbour in self.get_neighbours(v))
 
     def _require_vertex(self, v: Vertex):
         """Check if a vertex exists in the graph
@@ -297,7 +297,7 @@ class Graph(ABC):
 
             yield v
 
-            for neighbour in self.get_neigbours(v):
+            for neighbour in self.get_neighbours(v):
                 queue.append(neighbour)
 
     def depth_first_search(self, start: Vertex) -> Iterable[Vertex]:
@@ -320,7 +320,7 @@ class Graph(ABC):
 
             yield v
 
-            for neighbour in reversed(self.get_neigbours(v)):
+            for neighbour in reversed(self.get_neighbours(v)):
                 stack.append(neighbour)
 
     def get_inducted_subgraph(self) -> 'UndirectedGraph':

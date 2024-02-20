@@ -93,7 +93,7 @@ class LabeledModifiedGraph(Scene):
             u = queue.popleft()
             u_center = self.manim_graph[u].get_center()
 
-            for v in graph.get_neigbours(u):
+            for v in graph.get_neighbours(u):
                 v_center = self.manim_graph[v].get_center()
                 line = Arrow(
                     start=u_center,

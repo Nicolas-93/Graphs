@@ -71,13 +71,13 @@ class AdjGraph(Graph):
         super().remove_vertex(v)
         self._require_vertex(v)
 
-        for neigbours in self.edges.values():
-            neigbours.discard(v)
+        for neighbours in self.edges.values():
+            neighbours.discard(v)
 
         del self.edges[v]
         self.vertices.remove(v)
 
-    def get_neigbours(self, v: Vertex) -> Iterable[Vertex]:
+    def get_neighbours(self, v: Vertex) -> Iterable[Vertex]:
         self._require_vertex(v)
 
         return sorted(self.edges[v])
