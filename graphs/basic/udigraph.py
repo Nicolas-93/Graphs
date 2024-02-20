@@ -25,7 +25,7 @@ class UndirectedGraph(AdjGraph):
 
     def get_edges(self) -> Iterable[Edge]:
         return filter(
-            lambda edge : edge.v1 <= edge.v2,
+            lambda edge : edge.u <= edge.v,
             super().get_edges()
         )
 

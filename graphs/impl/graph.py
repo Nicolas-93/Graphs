@@ -9,14 +9,14 @@ Vertex = Hashable
 
 @dataclass(frozen=True, eq=True)
 class Edge:
-    v1: Vertex = field(hash=True, compare=True)
-    v2: Vertex = field(hash=True, compare=True)
+    u: Vertex = field(hash=True, compare=True)
+    v: Vertex = field(hash=True, compare=True)
 
     def opposite(self) -> 'Edge':
-        return Edge(self.v2, self.v1)
+        return Edge(self.v, self.u)
     
     def vertices(self) -> Tuple[Vertex, Vertex]:
-        return (self.v1, self.v2)
+        return (self.u, self.v)
     
     as_tuple = vertices
 
@@ -30,7 +30,7 @@ class Edge:
         return 2
     
     def stringify(self) -> str:
-        return (str(self.v1), str(self.v2))
+        return (str(self.u), str(self.v))
 
     def ordered(self) -> 'Edge':
         return Edge(*sorted(self.vertices()))
@@ -41,10 +41,10 @@ class WeightedEdge(Edge):
     weight: float = field(hash=None, compare=False)
 
     def as_edge(self) -> Edge:
-        return Edge(self.v1, self.v2)
+        return Edge(self.u, self.v)
 
     def as_tuple(self) -> Tuple[Vertex, Vertex]:
-        return (self.v1, self.v2, self.weight)
+        return (self.u, self.v, self.weight)
 
     def __len__(self):
         return 3
@@ -53,7 +53,7 @@ class WeightedEdge(Edge):
         return self.weight
 
     def opposite(self) -> 'WeightedEdge':
-        return WeightedEdge(self.v2, self.v1, self.weight)
+        return WeightedEdge(self.v, self.u, self.weight)
 
     def ordered(self) -> 'WeightedEdge':
         return WeightedEdge(*sorted(self.vertices()), self.weight)
@@ -80,11 +80,11 @@ class Graph(ABC):
             edge (Edge): Edge
         """
 
-        if not self.has_vertex(edge.v1):
-            self.add_vertex(edge.v1)
+        if not self.has_vertex(edge.u):
+            self.add_vertex(edge.u)
 
-        if not self.has_vertex(edge.v2):
-            self.add_vertex(edge.v2)
+        if not self.has_vertex(edge.v):
+            self.add_vertex(edge.v)
 
     def add_edges(self, edges: Iterable[Edge]):
         """Add multiple edges to the graph

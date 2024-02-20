@@ -32,8 +32,8 @@ class AdjGraph(Graph):
         return map(lambda tup: Edge(*tup),
             sorted(
                 chain.from_iterable(
-                    list(product((v1,), vn))
-                    for v1, vn in self.edges.items()
+                    list(product((u,), vn))
+                    for u, vn in self.edges.items()
                 )
             )
         )
