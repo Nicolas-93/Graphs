@@ -1,17 +1,15 @@
+import inspect
+from typing import Iterable, Optional
+from collections import defaultdict
+import graphviz as gv
+
 from graphs import Vertex, Edge
 from graphs.impl.adjacent_graph import AdjGraph
-
-from typing import Hashable, Sequence, Iterable, Tuple, Optional
-from collections import defaultdict
-from itertools import product, chain
-import graphviz as gv
-import inspect
 
 class UndirectedGraph(AdjGraph):
 
     vertices : set[Vertex]
     edges : defaultdict[Vertex, set[Vertex]]
-    __slots__ = tuple(__annotations__)
 
     def __init__(self, edges: Optional[Iterable[Edge]] = None):
         super().__init__(edges=edges)

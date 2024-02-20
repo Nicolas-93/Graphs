@@ -1,6 +1,6 @@
-from graphs import Vertex, Graph
 from typing import Union, Tuple
 from collections import deque, defaultdict
+from graphs import Vertex, Graph
 from graphs.utils import invert_dict
 
 def is_bipartite(graph: Graph) -> Union[Tuple[Tuple[Vertex], Tuple[Vertex]], bool]:
@@ -18,7 +18,7 @@ def is_bipartite(graph: Graph) -> Union[Tuple[Tuple[Vertex], Tuple[Vertex]], boo
     queue = deque()
     bipartition = defaultdict(lambda : -1)
     start = graph.get_vertices()[0]
-    
+
     queue.append(start)
     bipartition[start] = False
 

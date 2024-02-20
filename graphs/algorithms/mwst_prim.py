@@ -1,8 +1,8 @@
-from graphs.weighted import WeightedUndirectedGraph
-from graphs import WeightedEdge, Vertex
 from collections import defaultdict
 import heapq
 from typing import Optional, List
+from graphs.weighted import WeightedUndirectedGraph
+from graphs import WeightedEdge, Vertex
 
 EdgeHeap = List[WeightedEdge]
 
@@ -42,5 +42,5 @@ def mwst_prim(graph: WeightedUndirectedGraph, start: Vertex) -> WeightedUndirect
         tree.add_edge(edge)
         pending[edge.u] = False
         _store_valid_edges(graph, edge.u, candidates, pending)
-    
+
     return tree

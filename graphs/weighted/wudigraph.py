@@ -1,9 +1,9 @@
-from graphs.basic.udigraph import UndirectedGraph
-from graphs import Edge, WeightedEdge, Vertex
-from graphs.weighted.wgraph import WeightedGraph
-
 from typing import Optional, Iterable
 import graphviz as gv
+
+from graphs.basic.udigraph import UndirectedGraph
+from graphs import Edge, WeightedEdge
+from graphs.weighted.wgraph import WeightedGraph
 
 class WeightedUndirectedGraph(UndirectedGraph, WeightedGraph):
     def __init__(self, edges: Optional[Iterable[WeightedEdge]] = None):

@@ -1,7 +1,11 @@
-from typing import Hashable, Iterable, Tuple, Sequence
+"""
+Graph abstract class
+"""
+
+from typing import Hashable, Iterable, Tuple
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
-from collections import deque, namedtuple
+from collections import deque
 from functools import total_ordering
 import graphviz as gv
 
@@ -14,10 +18,10 @@ class Edge:
 
     def opposite(self) -> 'Edge':
         return Edge(self.v, self.u)
-    
+
     def vertices(self) -> Tuple[Vertex, Vertex]:
         return (self.u, self.v)
-    
+
     as_tuple = vertices
 
     def __iter__(self):
@@ -25,10 +29,10 @@ class Edge:
 
     def __getitem__(self, index: int):
         return self.as_tuple()[index]
-    
+
     def __len__(self):
         return 2
-    
+
     def stringify(self) -> str:
         return (str(self.u), str(self.v))
 
@@ -57,7 +61,7 @@ class WeightedEdge(Edge):
 
     def ordered(self) -> 'WeightedEdge':
         return WeightedEdge(*sorted(self.vertices()), self.weight)
-    
+
     def __lt__(self, other):
         return self.weight < other.weight
 
@@ -70,8 +74,7 @@ class Graph(ABC):
             edge (Edge): Edge linking two vertices
             if one those vertices doesn't exists, they will be created
         """
-        pass
-    
+
     def _add_vertex_if_inexistant(self, edge: Edge):
         """Add vertices from edge if they are not already
         in the graph.
@@ -102,7 +105,6 @@ class Graph(ABC):
         Args:
             v (Vertex): Vertex to add
         """
-        pass
 
     def add_vertices(self, vertices: Iterable[Vertex]):
         """Add multiple vertices to the graph
@@ -120,7 +122,6 @@ class Graph(ABC):
         Returns:
             Iterable[Edge]: Edges of the graph
         """
-        pass
 
     def get_edges_as_tuples(self) -> Iterable[tuple[Vertex, Vertex]]:
         """Get all graph's edges as tuples
@@ -137,7 +138,6 @@ class Graph(ABC):
         Returns:
             Iterable[Vertex]: Vertices of the graph
         """
-        pass
 
     @abstractmethod
     def get_loops(self) -> Iterable[Vertex]:
@@ -146,7 +146,6 @@ class Graph(ABC):
         Returns:
             Iterable[Vertex]: Vertices with loops
         """
-        pass
 
     @abstractmethod
     def has_edge(self, edge: Edge) -> bool:
@@ -158,7 +157,6 @@ class Graph(ABC):
         Returns:
             bool: True if the edge exists, False otherwise
         """
-        pass
 
     @abstractmethod
     def has_vertex(self, v: Vertex) -> bool:
@@ -170,7 +168,6 @@ class Graph(ABC):
         Returns:
             bool: True if the vertex exists, False otherwise
         """
-        pass
 
     @abstractmethod
     def get_degree(self, v: Vertex) -> int:
@@ -182,7 +179,6 @@ class Graph(ABC):
         Returns:
             int: Degree of the vertex
         """
-        pass
 
     def get_nb_edges(self) -> int:
         """Get the number of edges in the graph
@@ -210,7 +206,11 @@ class Graph(ABC):
 
     @abstractmethod
     def remove_edge(self, edge: Edge):
-        pass
+        """Remove an edge from the Graph
+
+        Args:
+            edge (Edge): Edge to remove
+        """
 
     @abstractmethod
     def remove_vertex(self, v: Vertex):
@@ -220,7 +220,6 @@ class Graph(ABC):
         Args:
             v (Vertex): Vertex to remove
         """
-        pass
 
     @abstractmethod
     def get_neighbours(self, v: Vertex) -> Iterable[Vertex]:
@@ -232,7 +231,6 @@ class Graph(ABC):
         Returns:
             Iterable[Vertex]: Neighbours of the vertex
         """
-        pass
 
     def get_neighbours_edges(self, v: Vertex) -> Iterable[Edge]:
         """Get neighbours edges of a vertex
@@ -271,11 +269,24 @@ class Graph(ABC):
             raise ValueError(f"Edge {edge} doesn't exists")
 
     def _require_inexistant_edge(self, edge: Edge):
+        """Raises an error if the edge exists in the graph
+        (eg: forbids to add an edge, if it already exists)
+
+        Args:
+            edge (Edge): Edge to ckeck
+
+        Raises:
+            ValueError: Edge already exists
+        """
         if self.has_edge(edge):
             raise ValueError(f"Edge {edge} already exists")
 
     def as_dot(self) -> gv.Graph:
-        pass
+        """Returns a dot representation of the graph
+
+        Returns:
+            gv.Graph: Graphviz's dot object
+        """
 
     def breadth_first_search(self, start: Vertex) -> Iterable[Vertex]:
         """Breadth first search of the graph
@@ -324,4 +335,4 @@ class Graph(ABC):
                 stack.append(neighbour)
 
     def get_inducted_subgraph(self) -> 'UndirectedGraph':
-        pass
+        ...

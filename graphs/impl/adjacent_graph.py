@@ -1,8 +1,8 @@
-from graphs import Vertex, Edge, Graph
-
 from collections import defaultdict
 from typing import Set, Optional, Iterable
 from itertools import product, chain
+
+from graphs import Vertex, Edge, Graph
 
 class AdjGraph(Graph):
     vertices : Set[Vertex]
@@ -19,14 +19,14 @@ class AdjGraph(Graph):
     def add_edge(self, edge: Edge):
         super().add_edge(edge)
         self._add_vertex_if_inexistant(edge)
-    
+
         left, right = edge.vertices()
         self.edges[left].add(right)
-    
+
     def add_vertex(self, v: Vertex):
         super().add_vertex(v)
         self.vertices.add(v)
-        self.edges[v]
+        self.edges.get(v)
 
     def get_edges(self) -> Iterable[Edge]:
         return map(lambda tup: Edge(*tup),

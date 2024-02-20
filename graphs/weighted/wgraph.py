@@ -1,6 +1,6 @@
-from graphs import Edge, Vertex, Graph, WeightedEdge
-
 from typing import Dict, Iterable, Tuple
+
+from graphs import Edge, WeightedEdge, Vertex, Graph
 
 class WeightedGraph(Graph):
     weights: Dict[Edge, float]
