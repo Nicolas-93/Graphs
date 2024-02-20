@@ -59,7 +59,7 @@ class WeightedEdge(Edge):
         return WeightedEdge(*sorted(self.vertices()), self.weight)
     
     def __lt__(self, other):
-        self.weight < other.weight
+        return self.weight < other.weight
 
 class Graph(ABC):
     @abstractmethod
