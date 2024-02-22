@@ -10,9 +10,6 @@ class WeightedGraph(Graph):
         self.weights = dict()
 
     def add_edge(self, edge: WeightedEdge):
-        # print(edge)
-        # import inspect
-        # print(inspect.stack()[1])
         self.weights[edge.as_edge()] = edge.get_weight()
 
     def remove_edge(self, edge: Edge):
@@ -33,7 +30,7 @@ class WeightedGraph(Graph):
     def get_edges_with_weights_as_tuples(self) -> Iterable[Tuple[Vertex, Vertex]]:
         return (edge.as_tuple() for edge in self.get_edges_with_weights())
 
-    def get_neighbours_edges_with_weight(self, v: Vertex) -> Iterable[Edge]:
+    def get_neighbours_edges_with_weight(self, v: Vertex) -> Iterable[WeightedEdge]:
         """Get neighbours edges of a vertex with weight
 
         Args:

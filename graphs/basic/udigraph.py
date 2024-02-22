@@ -22,10 +22,16 @@ class UndirectedGraph(AdjGraph):
         super().add_edge(edge.opposite())
 
     def get_edges(self) -> Iterable[Edge]:
-        return filter(
-            lambda edge : edge.u <= edge.v,
-            super().get_edges()
+        return map(
+            lambda edge: edge.ordered(),
+            filter(
+                lambda edge : edge.u <= edge.v,
+                super().get_edges()
+            )
         )
+
+    def get_neighbours_edges(self, v: Vertex) -> Iterable[Edge]:
+        return (Edge(*edge).ordered() for edge in super().get_neighbours_edges(v))
 
     def has_edge(self, edge: Edge) -> bool:
         return (

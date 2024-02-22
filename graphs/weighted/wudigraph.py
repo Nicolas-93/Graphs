@@ -2,7 +2,7 @@ from typing import Optional, Iterable
 import graphviz as gv
 
 from graphs.basic.udigraph import UndirectedGraph
-from graphs import Edge, WeightedEdge
+from graphs import Edge, WeightedEdge, Vertex
 from graphs.weighted.wgraph import WeightedGraph
 
 class WeightedUndirectedGraph(UndirectedGraph, WeightedGraph):
@@ -25,8 +25,7 @@ class WeightedUndirectedGraph(UndirectedGraph, WeightedGraph):
         super().set_weight(edge.ordered(), weight)
 
     def get_edges(self) -> Iterable[WeightedEdge]:
-        # Redefined for typing
-        return super().get_edges() # Calls UndirectedGraph's get_edges
+        return UndirectedGraph.get_edges(self)
 
     def as_dot(self) -> gv.Graph:
         dot = gv.Graph()
@@ -35,3 +34,6 @@ class WeightedUndirectedGraph(UndirectedGraph, WeightedGraph):
             dot.edge(*edge.stringify(), label=str(edge.get_weight()))
 
         return dot
+
+    def get_neighbours_edges_with_weight(self, v: Vertex) -> Iterable[WeightedEdge]:
+        return WeightedGraph.get_neighbours_edges_with_weight(self, v)
