@@ -1,15 +1,15 @@
 from typing import Optional, Iterable
 import graphviz as gv
 
-from graphs import Edge
+from graphs import DEdge
 from graphs.impl.adjacent_graph import AdjGraph
 
 class DirectedGraph(AdjGraph):
 
-    def __init__(self, edges: Optional[Iterable[Edge]] = None):
+    def __init__(self, edges: Optional[Iterable[DEdge]] = None):
         super().__init__(edges=edges)
 
-    def add_edge(self, edge: Edge):
+    def add_edge(self, edge: DEdge):
         self._require_inexistant_edge(edge)
         super().add_edge(edge)
 

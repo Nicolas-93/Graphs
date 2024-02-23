@@ -2,7 +2,7 @@
 Graph abstract class
 """
 
-from typing import Hashable, Iterable, Tuple
+from typing import Hashable, Iterable, Tuple, Union
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 from collections import deque
@@ -11,59 +11,49 @@ import graphviz as gv
 
 Vertex = Hashable
 
-@dataclass(frozen=True, eq=True)
-class Edge:
-    u: Vertex = field(hash=True, compare=True)
-    v: Vertex = field(hash=True, compare=True)
+@total_ordering
+@dataclass(unsafe_hash=True, eq=True)
+class DEdge:
+    u: Vertex = field()
+    v: Vertex = field()
+    weight: float = field(default=None)
 
     def opposite(self) -> 'Edge':
-        return Edge(self.v, self.u)
+        return DEdge(self.v, self.u, self.weight)
 
     def vertices(self) -> Tuple[Vertex, Vertex]:
         return (self.u, self.v)
 
-    as_tuple = vertices
+    def stringify(self):
+        return tuple((str(e) for e in self.as_tuple()))
 
-    def __iter__(self):
-        return iter(self.as_tuple())
-
-    def __getitem__(self, index: int):
-        return self.as_tuple()[index]
-
-    def __len__(self):
-        return 2
-
-    def stringify(self) -> str:
-        return (str(self.u), str(self.v))
-
-    def ordered(self) -> 'Edge':
-        return Edge(*sorted(self.vertices()))
-
-@total_ordering
-@dataclass(frozen=True, eq=True)
-class WeightedEdge(Edge):
-    weight: float = field(hash=None, compare=False)
-
-    def as_edge(self) -> Edge:
-        return Edge(self.u, self.v)
-
-    def as_tuple(self) -> Tuple[Vertex, Vertex]:
-        return (self.u, self.v, self.weight)
-
-    def __len__(self):
-        return 3
+    def as_tuple(self):
+        return (
+            (self.u, self.v, self.weight) if self.weight
+            else self.vertices()
+        )
 
     def get_weight(self) -> float:
         return self.weight
 
-    def opposite(self) -> 'WeightedEdge':
-        return WeightedEdge(self.v, self.u, self.weight)
+    def __iter__(self):
+        return iter(self.as_tuple())
 
-    def ordered(self) -> 'WeightedEdge':
-        return WeightedEdge(*sorted(self.vertices()), self.weight)
-
+    def __len__(self):
+        return 3 if self.weight else 2
+    
     def __lt__(self, other):
-        return self.weight < other.weight
+        return (
+            self.weight < other.weight if self.weight else
+            self.vertices() < other.vertices()
+        )
+
+@dataclass(unsafe_hash=True, eq=True)
+class UDEdge(DEdge):
+    def __post_init__(self):
+        self.u, self.v = tuple(sorted(self.vertices()))
+
+Edge = Union[DEdge, UDEdge]
 
 class Graph(ABC):
     @abstractmethod
@@ -241,7 +231,7 @@ class Graph(ABC):
         Returns:
             Iterable[Edge]: Vertex's neighbours edges
         """
-        return (Edge(v, neighbour) for neighbour in self.get_neighbours(v))
+        return (DEdge(v, neighbour) for neighbour in self.get_neighbours(v))
 
     def _require_vertex(self, v: Vertex):
         """Check if a vertex exists in the graph

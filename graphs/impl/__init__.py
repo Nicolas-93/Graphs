@@ -1,1 +1,1 @@
-from graphs.impl.graph import Graph, Edge, WeightedEdge, Vertex
+from graphs.impl.graph import Graph, Edge, Vertex, DEdge, UDEdge

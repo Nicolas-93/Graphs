@@ -1,4 +1,4 @@
-from graphs.impl import Edge, WeightedEdge, Vertex, Graph
+from graphs.impl import Edge, Vertex, Graph, UDEdge, DEdge
 from graphs.algorithms import (
     is_bipartite
 )

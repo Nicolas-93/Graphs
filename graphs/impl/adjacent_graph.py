@@ -2,7 +2,7 @@ from collections import defaultdict
 from typing import Set, Optional, Iterable
 from itertools import product, chain
 
-from graphs import Vertex, Edge, Graph
+from graphs import Vertex, Edge, DEdge, Graph
 
 class AdjGraph(Graph):
     vertices : Set[Vertex]
@@ -29,7 +29,7 @@ class AdjGraph(Graph):
         self.edges.get(v)
 
     def get_edges(self) -> Iterable[Edge]:
-        return map(lambda tup: Edge(*tup),
+        return map(lambda tup: DEdge(*tup),
             sorted(
                 chain.from_iterable(
                     list(product((u,), vn))

@@ -3,7 +3,7 @@ from typing import Optional, Tuple
 
 from manim import *
 
-from graphs import Vertex, Edge
+from graphs import Vertex, UDEdge
 from graphs.basic import UndirectedGraph
 from graphs.algorithms import is_bipartite
 from graphs.utils import invert_dict
@@ -11,14 +11,14 @@ from graphs.utils import invert_dict
 class LabeledModifiedGraph(Scene):
     def construct(self):
         edges = (
-            Edge(0, 1),
-            Edge(0, 2),
-            Edge(0, 3),
-            Edge(1, 4),
-            Edge(2, 5),
-            Edge(3, 5),
-            Edge(5, 6),
-            Edge(6, 4),
+            UDEdge(0, 1),
+            UDEdge(0, 2),
+            UDEdge(0, 3),
+            UDEdge(1, 4),
+            UDEdge(2, 5),
+            UDEdge(3, 5),
+            UDEdge(5, 6),
+            UDEdge(6, 4),
         )
         ug = UndirectedGraph(edges=edges)
 

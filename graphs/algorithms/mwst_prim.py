@@ -2,7 +2,7 @@ from collections import defaultdict
 import heapq
 from typing import Optional, List
 from graphs.weighted import WeightedUndirectedGraph
-from graphs import WeightedEdge, Vertex, Edge
+from graphs import UDEdge, Vertex, Edge
 from enum import Enum
 from graphs.utils import abreakpoint
 
@@ -13,7 +13,7 @@ class PrimAnimStep(str, Enum):
     REMOVE_INVALID_EDGE = "Arrête minimum ignorée et supprimée du tas"
 
 
-EdgeHeap = List[WeightedEdge]
+EdgeHeap = List[UDEdge]
 
 def _store_valid_edges(
         graph: WeightedUndirectedGraph,
@@ -23,11 +23,11 @@ def _store_valid_edges(
     ) -> None:
     for v in graph.get_neighbours(start):
         if pending[v]:
-            edge = WeightedEdge(start, v, graph.get_weight(Edge(start, v)))
+            edge = UDEdge(start, v, graph.get_weight(UDEdge(start, v)))
             heapq.heappush(edges, edge)
             abreakpoint(PrimAnimStep.PUSHED_EDGE)
 
-def _extract_correct_edge(edges: EdgeHeap, pending: dict) -> Optional[WeightedEdge]:
+def _extract_correct_edge(edges: EdgeHeap, pending: dict) -> Optional[UDEdge]:
     while edges:
         edge = heapq.heappop(edges)
         if pending[edge.u] != pending[edge.v]:

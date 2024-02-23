@@ -2,7 +2,7 @@ import inspect
 import sys
 from pprint import pprint
 from manim import *
-from graphs import Vertex, WeightedEdge
+from graphs import Vertex, UDEdge
 from graphs.weighted import WeightedUndirectedGraph
 from graphs.algorithms import mwst_prim, PrimAnimStep
 from typing import Optional, Tuple, Dict
@@ -43,7 +43,7 @@ class MwstPrim(Scene):
         self.play(Create(mg))
 
         labels = []
-        for u, v, n in graph.get_edges_with_weights():
+        for u, v, n in graph.get_weighted_edges():
             labels.append(Text(f"{n}").scale(0.6).next_to(mg.edges[u, v].get_center(), UP))
 
         self.play(*(Write(label) for label in labels))
@@ -53,18 +53,18 @@ class MwstPrim(Scene):
     def construct(self):
         wu_prim = WeightedUndirectedGraph(
             edges=[
-                WeightedEdge(1, 4, 2),
-                WeightedEdge(1, 0, 5),
-                WeightedEdge(4, 0, 2),
-                WeightedEdge(4, 3, 3),
-                WeightedEdge(3, 0, 4),
-                WeightedEdge(0, 2, 7),
-                WeightedEdge(3, 2, 9),
-                WeightedEdge(6, 4, 7),
-                WeightedEdge(6, 3, 4),
-                WeightedEdge(6, 5, 12),
-                WeightedEdge(5, 3, 7),
-                WeightedEdge(5, 2, 5)
+                UDEdge(1, 4, 2),
+                UDEdge(1, 0, 5),
+                UDEdge(4, 0, 2),
+                UDEdge(4, 3, 3),
+                UDEdge(3, 0, 4),
+                UDEdge(0, 2, 7),
+                UDEdge(3, 2, 9),
+                UDEdge(6, 4, 7),
+                UDEdge(6, 3, 4),
+                UDEdge(6, 5, 12),
+                UDEdge(5, 3, 7),
+                UDEdge(5, 2, 5)
             ]
         )
 
@@ -82,11 +82,11 @@ class MwstPrim(Scene):
                 self.play(FadeToColor(self.manim_graph.edges[edge.vertices()], color=BLUE))
             
             elif state == PrimAnimStep.REMOVE_INVALID_EDGE:
-                edge = variables['edge'].ordered()
+                edge = variables['edge']
                 self.play(Uncreate(self.manim_graph.edges[edge.vertices()]))
             
             elif state == PrimAnimStep.CHOOSEN_EDGE:
-                edge = variables['edge'].ordered()
+                edge = variables['edge']
                 self.play(
                     FadeToColor(self.manim_graph.edges[edge.vertices()], color=GREEN),
                     self.manim_graph[edge.v][0].animate.set_color(GREEN),
