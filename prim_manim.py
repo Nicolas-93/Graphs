@@ -70,31 +70,45 @@ class MwstPrim(Scene):
 
         self.manim_graph = self._graph_to_manim(wu_prim)
         self.anim_prim(wu_prim)
-    
-    def anim_prim(self, graph: WeightedUndirectedGraph):
+        self.play(self.manim_graph.animate.change_layout("tree", root_vertex=1))
+        self.wait(5)
 
-        def takectx(state: PrimAnimStep, *args, **kwargs):
+    @staticmethod
+    def set_vertex_color(graph, vertex, color):
+        return (
+            graph[vertex][0].animate.set_color(color),
+            graph[vertex][1].animate.set_color(BLACK)
+        )
+    
+    def anim_prim(self, graph: WeightedUndirectedGraph, start=1):
+
+        self.play(
+            *self.set_vertex_color(self.manim_graph, start, GREEN),
+            run_time=2
+        )
+
+        def takectx(state: PrimAnimStep, frame, *args, **kwargs):
             print(state)
-            variables = sys._getframe(2).f_locals
+            variables = frame.f_locals
+            edge = variables['edge']
 
             if state == PrimAnimStep.PUSHED_EDGE:
-                edge = variables['edge']
                 self.play(FadeToColor(self.manim_graph.edges[edge.vertices()], color=BLUE))
             
             elif state == PrimAnimStep.REMOVE_INVALID_EDGE:
-                edge = variables['edge']
                 self.play(Uncreate(self.manim_graph.edges[edge.vertices()]))
+                self.manim_graph._remove_edge(edge.vertices())
             
             elif state == PrimAnimStep.CHOOSEN_EDGE:
-                edge = variables['edge']
                 self.play(
                     FadeToColor(self.manim_graph.edges[edge.vertices()], color=GREEN),
-                    self.manim_graph[edge.v][0].animate.set_color(GREEN),
-                    self.manim_graph[edge.v][1].animate.set_color(BLACK)
+                    *self.set_vertex_color(self.manim_graph, edge.v, GREEN),
+                    *self.set_vertex_color(self.manim_graph, edge.u, GREEN),
+                    run_time=2
                 )
 
         set_anim_breakpoint_hook(takectx)
-        mwst_prim(graph=graph, start=0)
+        mwst_prim(graph=graph, start=start)
 
 if __name__ == '__main__':
     with tempconfig({"quality": "medium_quality", "preview": True}):
