@@ -5,7 +5,6 @@ Graph abstract class
 from typing import Hashable, Iterable, Tuple, Union
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
-from collections import deque
 from functools import total_ordering
 import graphviz as gv
 
@@ -277,52 +276,6 @@ class Graph(ABC):
         Returns:
             gv.Graph: Graphviz's dot object
         """
-
-    def breadth_first_search(self, start: Vertex) -> Iterable[Vertex]:
-        """Breadth first search of the graph
-
-        Args:
-            start (Vertex): Starting vertex
-
-        Yields:
-            Iterator[Iterable[Vertex]]: Vertices in the order they are visited
-        """
-        queue = deque()
-        visited = set()
-        queue.append(start)
-
-        while queue:
-            if (v := queue.popleft()) in visited:
-                continue
-            visited.add(v)
-
-            yield v
-
-            for neighbour in self.get_neighbours(v):
-                queue.append(neighbour)
-
-    def depth_first_search(self, start: Vertex) -> Iterable[Vertex]:
-        """Depth first search of the graph
-
-        Args:
-            start (Vertex): Starting vertex
-
-        Yields:
-            Iterator[Iterable[Vertex]]: Vertices in the order they are visited
-        """
-        stack = list()
-        visited = set()
-        stack.append(start)
-
-        while stack:
-            if (v := stack.pop()) in visited:
-                continue
-            visited.add(v)
-
-            yield v
-
-            for neighbour in reversed(self.get_neighbours(v)):
-                stack.append(neighbour)
 
     def get_inducted_subgraph(self) -> 'UndirectedGraph':
         ...
