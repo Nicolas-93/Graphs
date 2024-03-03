@@ -5,3 +5,4 @@ from ..algorithms.traversal import (
     breadth_first, breadth_first_tree,
     depth_first, depth_first_tree
 )
+from ..algorithms.components import linked_components
