@@ -1,2 +1,2 @@
-from graphs.weighted.wudigraph import WeightedUndirectedGraph
-from graphs.weighted.wdigraph import WeightedDirectedGraph
+from ..weighted.wudigraph import WeightedUndirectedGraph
+from ..weighted.wdigraph import WeightedDirectedGraph

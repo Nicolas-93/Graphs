@@ -1,2 +1,2 @@
-from graphs.basic.digraph import DirectedGraph
-from graphs.basic.udigraph import UndirectedGraph
+from ..basic.digraph import DirectedGraph
+from ..basic.udigraph import UndirectedGraph
