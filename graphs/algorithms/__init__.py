@@ -6,3 +6,4 @@ from ..algorithms.traversal import (
     depth_first, depth_first_tree
 )
 from ..algorithms.components import linked_components
+from ..algorithms.spp_djikstra import dijikstra
