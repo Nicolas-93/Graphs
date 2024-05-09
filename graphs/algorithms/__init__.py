@@ -7,3 +7,4 @@ from ..algorithms.traversal import (
 )
 from ..algorithms.components import linked_components
 from ..algorithms.spp_djikstra import dijikstra
+from ..algorithms.contains_cycle import contains_cycle
